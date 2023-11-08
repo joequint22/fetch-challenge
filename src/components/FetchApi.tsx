@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-type Tusers = Array<object>;
+type Tusers = Array<userData>;
 
 type userData = {
         name: {
@@ -25,9 +25,11 @@ type userData = {
 
 
 
+
+
 const FetchApi = () => {
   // 1. Fetch Users into usersData
-  const [usersData, setUsersData] = useState<object>();
+  const [usersData, setUsersData] = useState(null);
 
   // 2. do something with usersData
   const [users, setUsers] = useState<Tusers>([]);
@@ -72,7 +74,7 @@ const FetchApi = () => {
     };
     fetchUserData();
     if (usersData) {
-        const usersList = [];
+        const usersList: Tusers = [];
         for (const userData of usersData) {
             const newUser = createNewUser(userData);
             usersList.push(newUser);
@@ -80,7 +82,6 @@ const FetchApi = () => {
         setUsers(usersList);
     }
 }, []);
- console.log(users)
 
   // utitlity function
   function extractObjKeys(obj: object) {
@@ -93,7 +94,8 @@ const FetchApi = () => {
   return (<>
     {
         users.map((user, key) => {
-            <div key={key}>{user.firstName}</div>
+            <div key={key}>{user.name}</div>
+
         })
     }
   </>)
