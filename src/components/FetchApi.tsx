@@ -109,8 +109,8 @@ const DisplayData = () => {
     <tr>
       <th>NAME</th>
       <th>GENDER</th>
-      <th>EMAIL</th>
       <th>ADDRESS</th>
+      <th>EMAIL</th>
     </tr>
   )
 
