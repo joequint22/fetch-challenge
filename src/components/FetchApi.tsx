@@ -129,10 +129,10 @@ const DisplayData = () => {
 
 
   return (
-    <>
+    <table>
     {tableHeadContent}
     {tableBodyContent}
-    </>
+    </table>
   )
 };
 
