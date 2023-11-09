@@ -1,104 +1,141 @@
 import { useEffect, useState } from "react";
+import { nanoid } from 'nanoid'
 
-type Tusers = Array<userData>;
+type userData = { 
+  name: {
+    title: string, 
+    first: string, 
+    last: string
+  }, 
+  gender: string, 
+  email: string, 
+  location: {
+    street: {name: string, number: number},
+    state: string,
+    postcode: string,
+    city: string,
+    country: string
+  }
+}
 
-type userData = {
-        name: {
-            title: string;
-            first: string;
-            last: string;
-        },
-        gender: string,
-        email: string,
-        location: {
-            street: {
-                number: number,
-                name: string
-            }
-            city: string,
-            state: string,
-            country: string,
-            postcode: number,
+type Tuser = {
+  name: string,
+  gender: string,
+  email: string,
+  location: string 
+}
 
-        }
-    }
-
-
-
-
-
-const FetchApi = () => {
-  // 1. Fetch Users into usersData
-  const [usersData, setUsersData] = useState(null);
-
-  // 2. do something with usersData
-  const [users, setUsers] = useState<Tusers>([]);
-
-  // Fetch from https://randomuser.me/api/?results=10, create a table showing list of users, only including name, gender, email, location
-  //Add Sorting Feature to location column *button ascending
-
-  const createNewUser = (userData: userData) => {
-    const {
-      name: { title: titleName, first: firstName, last: lastName },
-      gender,
-      email,
-      location: {
-        street: { number: streetNumber, name: streetName },
-        city: city,
-        state: state,
-        country: country,
-        postcode: zip,
-      },
-    } = userData;
-
-    const user = {
-      name: `${titleName} ${firstName} ${lastName} `,
-      gender: gender,
-      email: email,
-      location: `${streetNumber} ${streetName} ${city} ${state} ${country} ${zip} `,
-    };
-    return user;
-  };
-
-  //name: {title first last}, gender, email, location: {street, city, state, country, postcode}
-  useEffect(() => {
-    const fetchUserData = async () => {
-      // COULDNT THINK OF THE PURPOSE OF THIS FUNCTIION AKA ITS NAME
-      try {
-        const res = await fetch("https://randomuser.me/api/?results=10");
-        const data = await res.json();
-        setUsersData(data.results); // FORGOT RESULTS
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUserData();
-    if (usersData) {
-        const usersList: Tusers = [];
-        for (const userData of usersData) {
-            const newUser = createNewUser(userData);
-            usersList.push(newUser);
-        }
-        setUsers(usersList);
-    }
-}, []);
-
-  // utitlity function
-  function extractObjKeys(obj: object) {
-    const objKeys: string[] = [];
-    Object.keys(obj).forEach((key: string) => objKeys.push(key));
-    console.log(objKeys);
-    return objKeys;
+const DisplayData = () => {
+  const [users, setUsers] = useState<Tuser[]>([])
+  //utility function: extract object keys from bigger json files
+  !function extractObjKeys(obj: object): object[]{
+    const objKeys = []
+    // Turns keys into strings
+    const keys = Object.keys(obj)
+    objKeys.push(keys)
+    return objKeys
   }
 
-  return (<>
-    {
-        users.map((user, key) => {
-            <div key={key}>{user.name}</div>
+  function createNewUser(userData: userData): Tuser{
+    const { 
+      name: {
+        title, 
+        first, 
+        last
+      }, 
+      gender, 
+      email, 
+      location: {
+        street: {name, number},
+        state,
+        postcode,
+        city,
+        country
+      }
+    } = userData
 
-        })
+    const user = {
+      name: `${title} ${first} ${last} `,
+      gender: gender,
+      email: email,
+      location: `${number} ${name} ${city} ${state} ${postcode} ${country} ` 
     }
-  </>)
+    return user
+  }
+  
+
+  // Fetch from https://randomuser.me/api/?results=10, create a table showing list of users, only including name, gender, email, location
+
+  // function createNewUsers(userData: userData): Tuser{
+
+  //
+  // }
+
+
+  useEffect(() => {
+    const fetchApi = async() => {
+      try {
+        const res = await fetch('haha')
+        //catch does not catch non 200 responses
+        if(!res.ok){
+          throw new Error('error', res)
+        }
+        const data = await res.json()
+        const newUsers = data.results.map(createNewUser)
+        setUsers(newUsers)
+        // const users = data.map(createNewUser)
+
+
+      } catch (err) {
+        switch (err.response.status){
+          case 400: break;
+          case 401: break;
+          case 404: break;
+          case 500: break;
+        }
+        console.log(err)
+        
+      }
+    }
+    fetchApi()
+    return () => {
+    }
+  }, [])
+  
+  let tableHeadContent;
+  let tableBodyContent;
+
+  tableHeadContent = (
+    <tr>
+      <th>NAME</th>
+      <th>GENDER</th>
+      <th>EMAIL</th>
+      <th>ADDRESS</th>
+    </tr>
+  )
+
+  if(users.length !== 0) tableBodyContent = (
+    <>
+    {users.map(user => (
+      <tr key={nanoid()}>
+        <td>{user.name}</td>
+        <td>{user.gender}</td>
+        <td>{user.location}</td>
+        <td>{user.email}</td>
+      </tr>
+    ))}
+    </>
+  )
+
+
+  return (
+    <>
+    {tableHeadContent}
+    {tableBodyContent}
+    </>
+  )
 };
 
-export default FetchApi;
+export default DisplayData;
+
+
