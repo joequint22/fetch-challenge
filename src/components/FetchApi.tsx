@@ -75,10 +75,10 @@ const DisplayData = () => {
   useEffect(() => {
     const fetchApi = async() => {
       try {
-        const res = await fetch('haha')
+        const res = await fetch('https://randomuser.me/api/?results=10')
         //catch does not catch non 200 responses
         if(!res.ok){
-          throw new Error('error', res)
+          throw new Response('error', res)
         }
         const data = await res.json()
         const newUsers = data.results.map(createNewUser)
