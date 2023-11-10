@@ -102,10 +102,9 @@ const DisplayData = () => {
     }
   }, [])
   
-  let tableHeadContent;
   let tableBodyContent;
 
-  tableHeadContent = (
+  const tableHeadContent = (
     <tr>
       <th>NAME</th>
       <th>GENDER</th>
