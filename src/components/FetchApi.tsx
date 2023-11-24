@@ -100,12 +100,12 @@ const DisplayData = () => {
 
   const tableHeadContent = (
     <> 
-    <tr>
+    <thead>
       <th>Name</th>
       <th>Gender</th>
       <th>Email</th>
       <th>Location</th>
-    </tr>
+    </thead>
     </>
   )
 
